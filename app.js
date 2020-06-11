@@ -31,18 +31,38 @@ fruit.save();//remember that every single time you run fruit.save it will save t
 const personSchema= new mongoose.Schema(
   {
     name: String,
-    age: Number
+    age: Number,
+    favouriteFruit: fruitSchema
   }
 );
 const Person= mongoose.model("Person", personSchema);
-const person = new Person(
-  {
-    name: "John",
-    age:37
-  }
-);
 
-//person.save();
+const mango = new Fruit({
+  name: "Mango",
+  score: 6,
+  review: "Decent Fruit"
+});
+mango.save();
+Person.updateOne({name: "John"}, {favouriteFruit: mango},function(err){
+  if(err){
+    console.log(err);
+  }else{
+    console.log("Successfully updated the document");
+  }
+});
+// const person= new Person({
+//   name: "Amy",
+//   age: 12,
+//   favouriteFruit: pineapple
+// });
+// const person = new Person(
+//   {
+//     name: "John",
+//     age:37
+//   }
+// );
+
+// person.save();
 
 // const kiwi = new Fruit(
 //   {
