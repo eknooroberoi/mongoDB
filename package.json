@@ -1,7 +1,6 @@
 {
   "name": "FruitsProject",
   "version": "1.0.0",
-  "description": "",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,6 +9,17 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "mongodb": "^3.5.8"
-  }
+    "mongodb": "^3.5.8",
+    "mongoose": "^5.9.18"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eknooroberoi/mongoDB.git"
+  },
+  "bugs": {
+    "url": "https://github.com/eknooroberoi/mongoDB/issues"
+  },
+  "homepage": "https://github.com/eknooroberoi/mongoDB#readme",
+  "description": ""
 }

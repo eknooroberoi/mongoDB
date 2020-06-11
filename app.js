@@ -1,85 +1,78 @@
-const MongoClient = require('mongodb').MongoClient;
-const assert = require('assert');//assert that just validates our data entry and our connection to the MongoDB database.
+const mongoose = require('mongoose');
+mongoose.connect("mongodb://localhost:27017/fruitDB", {useNewUrlParser: true, useUnifiedTopology: true});
+//27017 is port where we can access our mongodb database server
+//if fruitDB not present, it will create one
+const fruitSchema = new mongoose.Schema(
+  {
+    name: String,
+    rating: Number,
+    review: String
+  }
+);
+const Fruit= mongoose.model("Fruit", fruitSchema);
+const fruit= new Fruit(
+  {
+    name: "Apple",
+    rating: 7,
+    review: "Pretty solid as a fruit."
+  }
+);
 
-// Connection URL
-const url = 'mongodb://localhost:27017';//This is the base URL for connecting to our database.
+//fruit.save();//remember that every single time you run fruit.save it will save the same fruit into your fruits collection in your fruits database.
+//So if you don't want that to happen, then you can just comment out this method call and you won't end up with a whole bunch of apples in your database.
 
-// Database Name
-const dbName = 'fruitDB';
+const personSchema= new mongoose.Schema(
+  {
+    name: String,
+    age: Number
+  }
+);
+const Person= mongoose.model("Person", personSchema);
+const person = new Person(
+  {
+    name: "John",
+    age:37
+  }
+);
 
-// Create a new MongoClient
-const client = new MongoClient(url, { useUnifiedTopology: true });
+//person.save();
 
-// Use connect method to connect to the Server
-//we create a new Mongo client which is going to connect to
-//our MongoDB database and if a fruitsDB doesn't exist then it will create it.
-client.connect(function(err) {
-  assert.equal(null, err);
-  console.log("Connected successfully to server");
+const kiwi = new Fruit(
+  {
+    name: "Kiwi",
+    score: 10,
+    review: "The best fruit!"
+  }
+);
+const orange = new Fruit(
+  {
+    name: "Orange",
+    score: 4,
+    review: "Too sour for me"
+  }
+);
+const banana= new Fruit(
+  {
+    name: "Banana",
+    score: 3,
+    review: "Weird texture"
+  }
+);
 
-  const db = client.db(dbName);
-  // insertDocuments(db, function() {
-    findDocuments(db, function() {
-      client.close();//close the connection to our database
-      //only once it's done inserting the documents do we close the connection to our database.
-    });
-  // });
-  // insertDocuments(db, function() {
-  //   client.close();//close the connection to our database
-  //   //only once it's done inserting the documents do we close the connection to our database.
-  // });
+
+
+//insertMany and it takes two parameters. The first one is an array of objects that match that particular schema,
+//so all fruits here. We've got kiwi, orange and bananas. So we'll add that kiwi, orange and banana.
+//And then the second parameter will be a callback and it allows us to log any errors
+//if there were any issues with inserting all of these objects into our fruits collection.
+//And so we can check say if there's an error then we'll log the error, but else then we'll log "Successfully
+//saved all the fruits to fruitsDB". And let's close that off and let's hit save and exit out of our database
+//and run our app.js again.
+Fruit.insertMany([kiwi,orange,banana], function(err)
+{
+  if(err){
+    console.log(err);
+  }else{
+    console.log("Successfully saved all the fruits to fruitsDB");
+  }
 });
-
-
-//And the reason why I'm walking you through this and explaining the code is that in reality most developers
-//who are working with Node and MongoDB will rarely use the native MongoDB driver.
-//Now it's not because it's no good,
-//it works and allows a lot of personalization and you can drill down to the specifics and you can set
-//up and use your MongoDB database with a high level of control.
-
-
-//So we're now creating this array of fruits and we're using the method insertMany which comes from MongoDB
-//to insert all of these three documents into a collection called fruits inside a database called
-//fruitsDB.
-
-const insertDocuments = function(db, callback) {
-  // Get the documents collection
-  const collection = db.collection('fruits');
-  // Insert some documents
-  collection.insertMany([
-     {
-       name: "Apple",
-       score: 8,
-       review: "Great fruit"
-     },
-     {
-       name: "Orange",
-       score: 6,
-       review: "Kinda sour"
-     },
-     {
-       name: "Banana",
-       score: 9,
-       review: "Great stuff!"
-     }
-  ], function(err, result) {
-    assert.equal(err, null);// this one says validate to make sure that there are no errors when we inserted our document.
-    assert.equal(3, result.result.n);//ensure that we have three results that are inserted into our collection.
-    assert.equal(3, result.ops.length);//ensure that we have three results that are inserted into our collection.
-    console.log("Inserted 3 documents into the collection");//And if that is so then we're going to log inserted three documents into the collection.
-    callback(result);
-  });
-}
-
-
-const findDocuments = function(db, callback) {
-  // Get the documents collection
-  const collection = db.collection('fruits');
-  // Find some documents
-  collection.find({}).toArray(function(err, fruits) {
-    assert.equal(err, null);
-    console.log("Found the following records");
-    console.log(fruits)
-    callback(fruits);
-  });
-};
