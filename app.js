@@ -19,8 +19,8 @@ const fruitSchema = new mongoose.Schema(
 const Fruit= mongoose.model("Fruit", fruitSchema);
 const fruit= new Fruit(
   {
-    // name: "Apple",
-    rating: 34,
+    name: "Apple",
+    rating: 3,
     review: "Yummy peaches!"
   }
 );
@@ -85,13 +85,39 @@ const person = new Person(
 // });
 
 
-Fruit.find(function(err, fruits){
-  if(err){
-    console.log(err);
-  }else{
-    //mongoose.connection.close();
-    fruits.forEach(function(fruit){
-      console.log(fruit.name);
-    });
-  }
-});
+// Fruit.find(function(err, fruits){
+//   if(err){
+//     console.log(err);
+//   }else{
+//     //mongoose.connection.close();
+//     fruits.forEach(function(fruit){
+//       console.log(fruit.name);
+//     });
+//   }
+// });
+
+
+// Fruit.updateOne({_id: "5ee236eae2b0125dc0b2aa11"},{name: "Peach"}, function(err){
+//   if(err){
+//     console.log(err);
+//   }else{
+//     console.log("Successfully updated the document");
+//   }
+// });
+
+// Fruit.deleteOne({name: "Peach"}, function(err){
+//   if(err){
+//     console.log(err);
+//   }else{
+//     console.log("Successfully deleted the documemt");
+//   }
+// });
+
+
+// Fruit.deleteMany({name: "Apple"}, function(err){
+//   if(err){
+//     console.log(err);
+//   }else{
+//     console.log("Successfully deleted the documemt");
+//   }
+// });
